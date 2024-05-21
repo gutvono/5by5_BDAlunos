@@ -40,16 +40,17 @@ CREATE TABLE Aluno_Disciplina
 	N1 numeric (3, 1),
 	N2 numeric (3, 1),
 	Sub numeric (3, 1),
+	Media numeric (3, 1),
 	Faltas int,
 	CONSTRAINT PkAlunoDisciplina PRIMARY KEY (RA_aluno, Sigla_disciplina, Semestre, Ano),
 	CONSTRAINT FkRA_aluno FOREIGN KEY (RA_aluno) REFERENCES Aluno(RA),
 	CONSTRAINT FkSigla_disciplina FOREIGN KEY (Sigla_disciplina) REFERENCES Disciplina(Sigla)
 );
 
-INSERT INTO Aluno_Disciplina (RA_aluno, Sigla_disciplina, Semestre, Ano, N1, N2, Sub, Faltas)
+INSERT INTO Aluno_Disciplina (RA_aluno, Sigla_disciplina, Semestre, Ano, N1, N2, Sub, Media, Faltas)
 VALUES 
-	('123456789000000', 'BD', 2, 2022, 4.7, 9, null, 6),
-	('098765432111111', '.Net', 1, 2022, 7, 1, 6, 4);
+	('123456789000000', 'BD', 2, 2022, 4.7, 9, null, null, 6),
+	('098765432111111', '.Net', 1, 2022, 7, 1, 6, null, 4);
 
 
 --ALTER TABLE Aluno ADD CONSTRAINT UQCPF UNIQUE (CPF);
@@ -57,3 +58,11 @@ VALUES
 --INSERT INTO Aluno (RA, CPF, Nome_aluno, Data_nasc)
 --VALUES 
 --	('456', '11122233344', 'Fulano', '05/05/2020');
+
+--DROP TABLE DBAlunos.dbo.Aluno
+--DROP TABLE DBAlunos.dbo.Disciplina
+--DROP TABLE DBAlunos.dbo.Aluno_Disciplina
+
+select * from Aluno;
+select * from Aluno_Disciplina;
+select * from Disciplina;
