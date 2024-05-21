@@ -25,8 +25,8 @@ BEGIN
         @N1 NUMERIC(3,1),
         @N2 NUMERIC(3,1),
         @Sub NUMERIC(3,1),
-        @Faltas INT,
-        @Media NUMERIC(3,1);
+        @Media NUMERIC(3,1),
+        @Faltas INT;
 
     -- Obtém o primeiro registro
     FETCH NEXT FROM Aux_Cursor
@@ -36,12 +36,8 @@ BEGIN
         @N1,
         @N2,
         @Sub,
-        @Faltas,
-        @Media;
-
-    -- Imprime cabeçalho
-    PRINT('Dados do registro:');
-    PRINT('');
+        @Media,
+        @Faltas;
 
     -- Loop para processar cada registro
     WHILE @@FETCH_STATUS = 0
@@ -61,15 +57,6 @@ BEGIN
             Media = @Media
         WHERE
             RA_aluno = @RA_aluno AND Sigla_disciplina = @sigla;
-
-        -- Imprime informações do registro
-        PRINT(
-            'Id: ' + @RA_aluno + 
-            ', Codigo: ' + CONVERT(VARCHAR(10), @sigla) + 
-            ', Nota 1: ' + CONVERT(VARCHAR(10), ISNULL(@N1, 0)) + 
-            ', Nota 2: ' + CONVERT(VARCHAR(10), ISNULL(@N2, 0)) + 
-            ', Média: ' + CONVERT(VARCHAR(20), @Media)
-        );
 
         -- Obtém o próximo registro
         FETCH NEXT FROM Aux_Cursor
