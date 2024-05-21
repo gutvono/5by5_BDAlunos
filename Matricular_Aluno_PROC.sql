@@ -49,18 +49,17 @@ BEGIN
 
 END
 
-DECLARE
-	@Sig varchar(4) = (SELECT TOP 1 Sigla FROM Disciplina)
 
 EXEC Matricular_Aluno
-	'111112222233333',
-	'2222222222',
-	'Caboclo',
-	'2000-02-02',
-	1,
+	'333332222211111',
+	'11111111111',
+	'Fulano',
+	'1997-02-02',
+	2,
 	2023,
-	@Sig
+	'BD'
 
+--DELETE FROM Aluno WHERE RA = 333332222211111
 
 	/*@RA varchar(15),
 	@CPF varchar(11),
