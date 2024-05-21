@@ -63,6 +63,8 @@ VALUES
 --DROP TABLE DBAlunos.dbo.Disciplina
 --DROP TABLE DBAlunos.dbo.Aluno_Disciplina
 
+--ALTER TABLE Aluno_Disciplina ADD Situacao VARCHAR(20)
+
 select * from Aluno;
 select * from Aluno_Disciplina;
 select * from Disciplina;

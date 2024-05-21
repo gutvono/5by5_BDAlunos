@@ -2,6 +2,16 @@
 CREATE OR ALTER PROC Calculo_Situacao_Aluno
 AS
 BEGIN
+	-- Declaração de variáveis para armazenar os valores dos registros
+    DECLARE
+        @RA_aluno VARCHAR(15),
+        @sigla VARCHAR(4),
+        @N1 NUMERIC(3,1),
+        @N2 NUMERIC(3,1),
+        @Sub NUMERIC(3,1),
+        @Media NUMERIC(3,1),
+        @Faltas INT;
+
     -- Declaração do cursor para percorrer os registros da tabela Aluno_Disciplina
     DECLARE Aux_Cursor CURSOR FOR
         SELECT 
@@ -17,16 +27,6 @@ BEGIN
 
     -- Abre o cursor
     OPEN Aux_Cursor;
-
-    -- Declaração de variáveis para armazenar os valores dos registros
-    DECLARE
-        @RA_aluno VARCHAR(15),
-        @sigla VARCHAR(4),
-        @N1 NUMERIC(3,1),
-        @N2 NUMERIC(3,1),
-        @Sub NUMERIC(3,1),
-        @Media NUMERIC(3,1),
-        @Faltas INT;
 
     -- Obtém o primeiro registro
     FETCH NEXT FROM Aux_Cursor
@@ -49,14 +49,31 @@ BEGIN
         IF (@N2 IS NULL)
             SET @N2 = 0;
 
-        SET @Media = (@N1 + @N2) / 2;
+		IF (@Sub IS NOT NULL)
+			BEGIN
+				IF (@N1 > @N2)
+					SET @Media = (@N1 + @Sub) / 2
+				ELSE IF (@N2 > @N1)
+					SET @Media = (@Sub + @N2) / 2
+				ELSE
+					SET @Media = (@N1 + @Sub) / 2
+			END
+		ELSE
+			SET @Media = (@N1 + @N2) / 2;
 
         -- Atualiza a coluna "Media" na tabela Aluno_Disciplina
         UPDATE Aluno_Disciplina
         SET
-            Media = @Media
+            Media = @Media,
+			Situacao = CASE WHEN @Media >= 6 THEN 'Aprovado' ELSE 'Reprovado' END
         WHERE
             RA_aluno = @RA_aluno AND Sigla_disciplina = @sigla;
+
+		UPDATE Aluno_Disciplina
+		SET
+			Situacao = 'Reprovado por falta'
+		WHERE
+            RA_aluno = @RA_aluno AND Sigla_disciplina = @sigla AND Faltas > 5;
 
         -- Obtém o próximo registro
         FETCH NEXT FROM Aux_Cursor
@@ -69,9 +86,6 @@ BEGIN
             @Faltas,
             @Media;
     END
-
-    -- Imprime linha em branco
-    PRINT('');
 
     -- Fecha o cursor
     CLOSE Aux_Cursor;
